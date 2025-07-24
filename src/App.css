@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Optional input class if using Tailwind directly */
+.input {
+  @apply border border-gray-300 px-4 py-2 rounded w-full focus:outline-red-500;
+}

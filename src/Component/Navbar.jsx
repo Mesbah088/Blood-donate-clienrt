@@ -1,105 +1,115 @@
-import { Link, NavLink } from "react-router";
-import { useContext } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
+import { useContext, useState } from "react";
 import { AuthContext } from "./AuthProvider/authprovider";
-import { LogOut, Menu } from "lucide-react";
-import { useState } from "react";
+import { LogOut, Menu, X } from "lucide-react";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logOut()
       .then(() => {
         toast.success("Logged out successfully");
+        navigate("/login"); // optional redirect
       })
-      .catch(err => console.error(err));
+      .catch((err) => {
+        console.error("Logout error:", err);
+        toast.error("Logout failed");
+      });
   };
 
   const navLinks = (
     <>
-      <li><NavLink to="/" className="hover:text-red-600">Home</NavLink></li>
-      <li><NavLink to="/donation-requests" className="hover:text-red-600">Donation Requests</NavLink></li>
-      <li><NavLink to="/blogs" className="hover:text-red-600">Blogs</NavLink></li>
+      <NavLink to="/" className="nav-link">Home</NavLink>
+      <NavLink to="/donation-requests" className="nav-link">Donation Requests</NavLink>
+      <NavLink to="/blogs" className="nav-link">Blogs</NavLink>
       {user && (
         <>
-          <li><NavLink to="/dashboard" className="hover:text-red-600">Dashboard</NavLink></li>
-          <li><NavLink to="/funding" className="hover:text-red-600">Funding</NavLink></li>
+          <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
+          <NavLink to="/funding" className="nav-link">Funding</NavLink>
         </>
       )}
     </>
   );
 
   return (
-    <nav className="bg-white shadow sticky top-0 z-50">
+    <header className="shadow sticky top-0 z-50 bg-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-red-600">
+        <Link to="/" className="text-2xl font-bold text-red-600 flex items-center gap-2">
           🩸 BloodConnect
         </Link>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex gap-6 items-center font-medium text-gray-700">
+        <nav className="hidden md:flex items-center gap-6 text-gray-700 font-medium">
           {navLinks}
           {user ? (
             <div className="relative group">
               <img
                 src={user.photoURL || "https://i.ibb.co/2nzwRr8/default-avatar.png"}
-                alt="avatar"
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-red-500"
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full border-2 border-red-500 cursor-pointer"
               />
-              <ul className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md hidden group-hover:block">
-                <li className="px-4 py-2 hover:bg-gray-100 text-gray-800">
-                  <Link to="/dashboard/profile">Profile</Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100 text-gray-800">
-                  <button onClick={handleLogout} className="flex items-center gap-2">
-                    <LogOut className="w-4 h-4" /> Logout
-                  </button>
-                </li>
-              </ul>
+              <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-48 hidden group-hover:block transition-all duration-200 z-50">
+                <Link to="/dashboard/profile" className="block px-4 py-2 hover:bg-gray-100">
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-left text-red-600"
+                >
+                  <LogOut className="w-4 h-4" /> Logout
+                </button>
+              </div>
             </div>
           ) : (
-            <li>
-              <Link to="/login" className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600">
-                Login
-              </Link>
-            </li>
+            <Link
+              to="/login"
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all"
+            >
+              Login
+            </Link>
           )}
-        </ul>
+        </nav>
 
-        {/* Mobile Menu Icon */}
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            <Menu />
+          <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <ul className="md:hidden px-4 pb-4 space-y-2 font-medium text-gray-700 bg-white shadow">
-          {navLinks}
-          {user ? (
-            <>
-              <li><Link to="/dashboard/profile">Profile</Link></li>
-              <li>
-                <button onClick={handleLogout} className="flex items-center gap-2 text-red-600">
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-md">
+          <div className="flex flex-col gap-3 p-4 text-gray-700 font-medium">
+            {navLinks}
+            {user ? (
+              <>
+                <Link to="/dashboard/profile" className="nav-link">Profile</Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-red-600"
+                >
                   <LogOut className="w-4 h-4" /> Logout
                 </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link to="/login" className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600 block text-center">
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-red-500 text-white px-4 py-2 rounded text-center hover:bg-red-600"
+              >
                 Login
               </Link>
-            </li>
-          )}
-        </ul>
+            )}
+          </div>
+        </div>
       )}
-    </nav>
+    </header>
   );
 };
 
