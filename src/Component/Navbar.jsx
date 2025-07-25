@@ -49,11 +49,11 @@ const Navbar = () => {
           {user ? (
             <div className="relative group">
               <img
-                src={user.photoURL || "https://i.ibb.co/2nzwRr8/default-avatar.png"}
+                src={user.photoURL}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full border-2 border-red-500 cursor-pointer"
               />
-              <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-48 hidden group-hover:block transition-all duration-200 z-50">
+              <div className="absolute right-0 mt-0 bg-white shadow-lg rounded-md w-48 hidden group-hover:block transition-all duration-200 z-50">
                 <Link to="/dashboard/profile" className="block px-4 py-2 hover:bg-gray-100">
                   Profile
                 </Link>
@@ -77,16 +77,16 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button   onClick={() => setMenuOpen(!menuOpen)}  aria-label="Toggle menu">
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6 text-black" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-md">
-          <div className="flex flex-col gap-3 p-4 text-gray-700 font-medium">
+        <div className="md:hidden  bg-white border-t border-gray-200 shadow-md">
+          <div className="flex flex-col gap-3 p-4 text-gray-900 font-medium">
             {navLinks}
             {user ? (
               <>
