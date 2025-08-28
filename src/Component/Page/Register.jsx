@@ -24,7 +24,7 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -33,8 +33,8 @@ const Register = () => {
 
     try {
       const res = await createUser(formData.email, formData.password);
-      await updateUserProfile(formData.name, formData.photo);
-
+      // await updateUserProfile(formData.name, formData.photo);
+console.log(res);
       // Store user in DB
       const newUser = {
         name: formData.name,
@@ -47,11 +47,13 @@ const Register = () => {
         status: "active",
       };
 
+      console.log(newUser);
       await axios.post("http://localhost:3000/users", newUser);
 
       Swal.fire("Success!", "Account created successfully!", "success");
       navigate("/dashboard/profile");
     } catch (error) {
+      console.log(error);
       Swal.fire("Error", error.message, "error");
     }
   };

@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
     await updateUser({ displayName: name, photoURL });
   };
 
-  const logInUser = (email, password) => {
+  const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
     loading,
     createUser,
     registerUser,
-    logInUser,
+    signIn,
     googleLogin,
     logOut,
     updateUser,
