@@ -39,15 +39,15 @@ export const router = createBrowserRouter([
 
       },
       {
-        path: "/dashboard-admin",
+        path: "/dashboard/admin",
         element: <AdminDashboard/>
       },
       {
-        path: "/dashboard-donor",
+        path: "/dashboard/donor",
         element: <DonorDashboard/>
       },
       {
-        path:"/dashboard-volunteer",
+        path:"/dashboard/volunteer",
         element: <VolunteerDashboard/>
       },
     

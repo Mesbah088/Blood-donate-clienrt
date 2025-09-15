@@ -41,19 +41,19 @@ const Navbar = () => {
             <span className="nav-link cursor-pointer">Dashboard</span>
             <div className="absolute left-0 mt-0 hidden group-hover:block bg-white shadow-lg rounded-md w-56 z-50">
               <Link
-                to="/dashboard-admin"
+                to="/dashboard/admin"
                 className="block px-4 py-2 hover:bg-gray-100"
               >
                 Admin Dashboard
               </Link>
               <Link
-                to="/dashboard-donor"
+                to="/dashboard/donor"
                 className="block px-4 py-2 hover:bg-gray-100"
               >
                 Donor Dashboard
               </Link>
               <Link
-                to="/dashboard-volunteer"
+                to="/dashboard/volunteer"
                 className="block px-4 py-2 hover:bg-gray-100"
               >
                 Volunteer Dashboard
