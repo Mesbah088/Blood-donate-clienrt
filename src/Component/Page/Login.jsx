@@ -24,7 +24,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       let errorMessage = "Something went wrong!";
       if (error.code === "auth/user-not-found") {
