@@ -12,6 +12,7 @@ import DonorDashboard from "../Page/Dashboard/DonorDashboard";
 import BlogPage from "../Public/BlogPage";
 import BlogDetails from "../Public/BlogDetails";
 import SearchPage from "../Public/SearchPage";
+import VolunteerDashboard from "../Page/Dashboard/VolunteerDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -38,12 +39,16 @@ export const router = createBrowserRouter([
 
       },
       {
-        path: "/dashboard",
+        path: "/dashboard-admin",
         element: <AdminDashboard/>
       },
       {
-        path: "/dashboard",
+        path: "/dashboard-donor",
         element: <DonorDashboard/>
+      },
+      {
+        path:"/dashboard-volunteer",
+        element: <VolunteerDashboard/>
       },
     
     ]
