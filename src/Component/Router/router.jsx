@@ -13,6 +13,7 @@ import BlogPage from "../Public/BlogPage";
 import BlogDetails from "../Public/BlogDetails";
 import SearchPage from "../Public/SearchPage";
 import VolunteerDashboard from "../Page/Dashboard/VolunteerDashboard";
+import RequestsPage from "../Public/RequestsPage";
 
 export const router = createBrowserRouter([
   {
@@ -34,10 +35,10 @@ export const router = createBrowserRouter([
         element: <BlogDetails/>
       },
       {
-        path: "/search" ,
-        element: <SearchPage/>
-
+        path:"/donation-requests",
+        element: <RequestsPage/>
       },
+    
       {
         path: "/dashboard/admin",
         element: <AdminDashboard/>
