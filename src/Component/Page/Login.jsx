@@ -61,7 +61,7 @@ const Login = () => {
               type="email"
               name="email"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-red-500"
+              className="w-full px-4 py-2 border bg-gray-900 rounded focus:outline-red-500"
               value={formData.email}
               onChange={handleChange}
             />
@@ -77,7 +77,7 @@ const Login = () => {
               type="password"
               name="password"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-red-500"
+              className="w-full px-4 py-2 border bg-gray-700 rounded focus:outline-red-500"
               value={formData.password}
               onChange={handleChange}
             />
