@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../AuthProvider/authprovider";
 import useUserRole from "../hooks/useUserRole";
 import AdminDashboard from "./AdminDashboard";
-import DonorDashboard from "./DonorDashboard";
+import DonorDashboard from "./Donor/DonorDashboard";
 import VolunteerDashboard from "./VolunteerDashboard";
 import Loader from "../components/Shared/Loader";
 

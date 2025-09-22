@@ -8,7 +8,7 @@ import Home from "../Public/Home";
 import Login from "../Page/Login";
 import Register from "../Page/Register";
 import AdminDashboard from "../Page/Dashboard/Admin/AdminDashboard";
-import DonorDashboard from "../Page/Dashboard/DonorDashboard";
+import DonorDashboard from "../Page/Dashboard/Donor/DonorDashboard";
 import BlogPage from "../Public/BlogPage";
 import BlogDetails from "../Public/BlogDetails";
 import SearchPage from "../Public/SearchPage";
@@ -16,6 +16,9 @@ import VolunteerDashboard from "../Page/Dashboard/VolunteerDashboard";
 import RequestsPage from "../Public/RequestsPage";
 import ManageUsers from "../Page/Dashboard/Admin/ManageUsers";
 import BloodRequests from "../Page/Dashboard/Admin/BloodRequests";
+import DonorProfile from "../Page/Dashboard/Donor/DonorProfile";
+import MyDonations from "../Page/Dashboard/Donor/MyDonations";
+import CreateDonationRequest from "../Page/Dashboard/Donor/CreateDonationRequest";
 
 export const router = createBrowserRouter([
   {
@@ -53,7 +56,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/donor",
-        element: <DonorDashboard/>
+        element: <DonorDashboard/>,
+        children: [
+          {path: "profile", element: <DonorProfile />},
+          {path: "my-donations", element: <MyDonations/>},
+          {path: "create-request", element: <CreateDonationRequest/>}
+        ],
 
       },
       {
@@ -71,6 +79,7 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register/>
-  }
+  },
+  
 
 ]);

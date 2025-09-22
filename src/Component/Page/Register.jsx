@@ -51,7 +51,7 @@ console.log(res);
       await axios.post("http://localhost:3000/users", newUser);
 
       Swal.fire("Success!", "Account created successfully!", "success");
-      navigate("/dashboard/profile");
+      navigate("/");
     } catch (error) {
       console.log(error);
       Swal.fire("Error", error.message, "error");
