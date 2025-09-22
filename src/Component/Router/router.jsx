@@ -7,13 +7,15 @@ import ErrorPage from "../MainLayout/Errorpage";
 import Home from "../Public/Home";
 import Login from "../Page/Login";
 import Register from "../Page/Register";
-import AdminDashboard from "../Page/Dashboard/AdminDashboard";
+import AdminDashboard from "../Page/Dashboard/Admin/AdminDashboard";
 import DonorDashboard from "../Page/Dashboard/DonorDashboard";
 import BlogPage from "../Public/BlogPage";
 import BlogDetails from "../Public/BlogDetails";
 import SearchPage from "../Public/SearchPage";
 import VolunteerDashboard from "../Page/Dashboard/VolunteerDashboard";
 import RequestsPage from "../Public/RequestsPage";
+import ManageUsers from "../Page/Dashboard/Admin/ManageUsers";
+import BloodRequests from "../Page/Dashboard/Admin/BloodRequests";
 
 export const router = createBrowserRouter([
   {
@@ -41,11 +43,18 @@ export const router = createBrowserRouter([
     
       {
         path: "/dashboard/admin",
-        element: <AdminDashboard/>
+        element: <AdminDashboard/>,
+        children : [
+      { path: "users", element: <ManageUsers /> },
+      { path: "requests", element: <BloodRequests/> },
+      //{ path: "blogs", element: <ManageBlogs /> },
+      //{ path: "settings", element: <SiteSettings /> },
+    ],
       },
       {
         path: "/dashboard/donor",
         element: <DonorDashboard/>
+
       },
       {
         path:"/dashboard/volunteer",
