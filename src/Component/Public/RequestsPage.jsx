@@ -10,13 +10,11 @@ const RequestsPage = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await fetch("http://localhost:3000/donation-requests"); // backend route
+        // ✅ শুধু pending requests আনবে
+        const res = await fetch("http://localhost:3000/donation-requests?status=pending");
         if (!res.ok) throw new Error("Failed to fetch donation requests");
         const data = await res.json();
-
-        // শুধু pending requests দেখাবে
-        const pending = data.filter((req) => req.donationStatus === "pending");
-        setRequests(pending);
+        setRequests(data);
       } catch (err) {
         console.error("Error fetching donation requests:", err);
         setError("Failed to load donation requests.");

@@ -47,9 +47,9 @@ export default function BloodRequests() {
   if (loading) return <div className="p-6">Loading blood requests...</div>;
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">Manage Blood Requests</h1>
+        <h1 className="text-2xl text-emerald-500 font-semibold">Manage Blood Requests</h1>
         <select
           className="border px-3 py-2 rounded"
           value={filter}
@@ -64,7 +64,7 @@ export default function BloodRequests() {
         </select>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-xl shadow-sm">
+      <div className="overflow-x-auto bg-cyan-500 rounded-xl shadow-sm">
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-left text-gray-600">
             <tr>

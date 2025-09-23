@@ -8,13 +8,24 @@ const DonorProfile = () => {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // backend থেকে user data আনবো
+  // District → Upazila mapping
+  const districtData = {
+    Dhaka: ["Mirpur", "Savar", "Uttara", "Dhanmondi"],
+    Chattogram: ["Patenga", "Pahartali", "Halishahar", "Rangunia"],
+    Khulna: ["Batiaghata", "Dumuria", "Phultala"],
+    Rajshahi: ["Godagari", "Paba", "Bagha"],
+    Sylhet: ["Beanibazar", "Golapganj", "Jaintiapur"],
+  };
+
+  const districts = Object.keys(districtData);
+
+  // Backend থেকে user data আনবো
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/users?email=${user.email}`)
+      fetch(`http://localhost:3000/donor/profile/${user.email}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data && data._id) {
+          if (data?._id) {
             setFormData(data);
           } else {
             // যদি DB তে না থাকে
@@ -24,6 +35,8 @@ const DonorProfile = () => {
               bloodGroup: "",
               district: "",
               upazila: "",
+              phone: "",
+              lastDonationDate: "",
               role: "donor",
               status: "active",
             });
@@ -37,24 +50,29 @@ const DonorProfile = () => {
     }
   }, [user]);
 
-  // input change
+  // Input change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // যদি district change হয় → upazila reset
+    if (name === "district") {
+      setFormData({ ...formData, district: value, upazila: "" });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  // save changes
+  // Save changes
   const handleSave = async () => {
-    if (!formData._id) {
-      Swal.fire("⚠️", "User not found in database!", "warning");
-      return;
-    }
-
     try {
-      const res = await fetch(`http://localhost:3000/users/${formData._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `http://localhost:3000/donor/profile/${formData.email}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (res.ok) {
         Swal.fire("✅ Success", "Profile updated successfully!", "success");
@@ -68,48 +86,75 @@ const DonorProfile = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-10">⏳ Loading profile...</div>;
-  if (!formData.email) return <div className="text-center py-10">⚠️ No user data available</div>;
+  if (loading)
+    return (
+      <div className="text-center py-10 text-gray-500 animate-pulse">
+        ⏳ Loading profile...
+      </div>
+    );
+
+  if (!formData.email)
+    return (
+      <div className="text-center py-10 text-red-500">
+        ⚠️ No user data available
+      </div>
+    );
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow">
-      <h2 className="text-2xl font-bold mb-6 text-red-600">My Profile</h2>
+    <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+      <h2 className="text-3xl font-bold text-red-600 mb-6">🩸 My Profile</h2>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Name */}
         <div>
-          <label className="block font-medium">Name</label>
+          <label className="block text-sm font-medium text-gray-600">Name</label>
           <input
             name="name"
             value={formData.name || ""}
             onChange={handleChange}
             readOnly={!editing}
-            className={`w-full border rounded px-3 py-2 ${
-              !editing ? "bg-gray-100" : ""
+            className={`mt-1 w-full border rounded-lg px-3 py-2 ${
+              !editing ? "bg-gray-100 cursor-not-allowed" : "bg-white"
             }`}
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block font-medium">Email</label>
+          <label className="block text-sm font-medium text-gray-600">Email</label>
           <input
             name="email"
             value={formData.email || ""}
             readOnly
-            className="w-full border rounded px-3 py-2 bg-gray-100"
+            className="mt-1 w-full border rounded-lg px-3 py-2 bg-gray-100 cursor-not-allowed"
           />
         </div>
 
-        {/* Blood Group */}
+        {/* Phone */}
         <div>
-          <label className="block font-medium">Blood Group</label>
+          <label className="block text-sm font-medium text-gray-600">Phone</label>
+          <input
+            name="phone"
+            value={formData.phone || ""}
+            onChange={handleChange}
+            readOnly={!editing}
+            className={`mt-1 w-full border rounded-lg px-3 py-2 ${
+              !editing ? "bg-gray-100 cursor-not-allowed" : "bg-white"
+            }`}
+          />
+        </div>
+
+        {/* Blood Group Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-gray-600">
+            Blood Group
+          </label>
           <select
             name="bloodGroup"
             value={formData.bloodGroup || ""}
             onChange={handleChange}
             disabled={!editing}
-            className="w-full border rounded px-3 py-2 bg-white"
+            className="mt-1 w-full border rounded-lg px-3 py-2 bg-white"
           >
             <option value="">Select</option>
             <option value="A+">A+</option>
@@ -123,57 +168,89 @@ const DonorProfile = () => {
           </select>
         </div>
 
-        {/* District */}
+        {/* District Dropdown */}
         <div>
-          <label className="block font-medium">District</label>
-          <input
+          <label className="block text-sm font-medium text-gray-600">
+            District
+          </label>
+          <select
             name="district"
             value={formData.district || ""}
             onChange={handleChange}
-            readOnly={!editing}
-            className={`w-full border rounded px-3 py-2 ${
-              !editing ? "bg-gray-100" : ""
-            }`}
-          />
+            disabled={!editing}
+            className="mt-1 w-full border rounded-lg px-3 py-2 bg-white"
+          >
+            <option value="">Select</option>
+            {districts.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Upazila */}
+        {/* Upazila Dropdown (depends on District) */}
         <div>
-          <label className="block font-medium">Upazila</label>
-          <input
+          <label className="block text-sm font-medium text-gray-600">
+            Upazila
+          </label>
+          <select
             name="upazila"
             value={formData.upazila || ""}
             onChange={handleChange}
+            disabled={!editing || !formData.district}
+            className="mt-1 w-full border rounded-lg px-3 py-2 bg-white"
+          >
+            <option value="">Select</option>
+            {formData.district &&
+              districtData[formData.district]?.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        {/* Last Donation Date */}
+        <div>
+          <label className="block text-sm font-medium text-gray-600">
+            Last Donation Date
+          </label>
+          <input
+            type="date"
+            name="lastDonationDate"
+            value={formData.lastDonationDate || ""}
+            onChange={handleChange}
             readOnly={!editing}
-            className={`w-full border rounded px-3 py-2 ${
-              !editing ? "bg-gray-100" : ""
+            className={`mt-1 w-full border rounded-lg px-3 py-2 ${
+              !editing ? "bg-gray-100 cursor-not-allowed" : "bg-white"
             }`}
           />
         </div>
       </div>
 
       {/* Buttons */}
-      <div className="mt-6 flex gap-3">
+      <div className="mt-8 flex gap-3">
         {!editing ? (
           <button
             onClick={() => setEditing(true)}
-            className="bg-red-600 text-white px-4 py-2 rounded"
+            className="bg-red-600 text-white px-6 py-2 rounded-lg shadow hover:bg-red-700 transition"
           >
-            Edit Profile
+            ✏️ Edit Profile
           </button>
         ) : (
           <>
             <button
               onClick={handleSave}
-              className="bg-green-600 text-white px-4 py-2 rounded"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition"
             >
-              Save
+              💾 Save
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
+              className="bg-gray-400 text-white px-6 py-2 rounded-lg shadow hover:bg-gray-500 transition"
             >
-              Cancel
+              ❌ Cancel
             </button>
           </>
         )}
