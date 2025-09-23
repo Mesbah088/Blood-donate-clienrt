@@ -7,7 +7,7 @@ export default function BloodRequests() {
 
   // সব রিকোয়েস্ট লোড করা
   useEffect(() => {
-    fetch("http://localhost:3000/requests") // তোমার server এর URL
+    fetch("http://localhost:3000/donation-requests") // ✅ ঠিক করা হলো
       .then((res) => res.json())
       .then((data) => {
         setRequests(data);
@@ -20,16 +20,19 @@ export default function BloodRequests() {
   }, []);
 
   // Action handler (status change)
-  const handleAction = async (id, status) => {
-    const res = await fetch(`http://localhost:3000/requests/status/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
+  const handleAction = async (id, donationStatus) => {
+    const res = await fetch(
+      `http://localhost:3000/donation-requests/status/${id}`, // ✅ ঠিক করা হলো
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ donationStatus }),
+      }
+    );
 
     if (res.ok) {
       const updated = requests.map((r) =>
-        r._id === id ? { ...r, status } : r
+        r._id === id ? { ...r, donationStatus } : r
       );
       setRequests(updated);
     }
@@ -37,7 +40,9 @@ export default function BloodRequests() {
 
   // Filter করা
   const filteredRequests =
-    filter === "all" ? requests : requests.filter((r) => r.status === filter);
+    filter === "all"
+      ? requests
+      : requests.filter((r) => r.donationStatus === filter);
 
   if (loading) return <div className="p-6">Loading blood requests...</div>;
 
@@ -74,13 +79,13 @@ export default function BloodRequests() {
           <tbody>
             {filteredRequests.map((r) => (
               <tr key={r._id} className="border-t">
-                <td className="p-3">{r.recipient}</td>
+                <td className="p-3">{r.recipientName}</td>
                 <td className="p-3">{r.bloodGroup}</td>
-                <td className="p-3">{r.location}</td>
+                <td className="p-3">{r.hospitalName}</td>
                 <td className="p-3">
-                  {new Date(r.date).toLocaleDateString()}
+                  {new Date(r.donationDate).toLocaleDateString()}
                 </td>
-                <td className="p-3 capitalize">{r.status}</td>
+                <td className="p-3 capitalize">{r.donationStatus}</td>
                 <td className="p-3 space-x-2">
                   <button
                     onClick={() => handleAction(r._id, "approved")}

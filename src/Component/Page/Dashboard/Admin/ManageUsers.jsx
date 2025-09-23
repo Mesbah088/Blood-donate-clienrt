@@ -19,26 +19,18 @@ export default function ManageUsers() {
       });
   }, []);
 
-  // Action Handler
-  const handleAction = async (id, action) => {
+  // ---------- ইউজার Action Handler ----------
+  const handleUpdate = async (id, field, value) => {
     let url = "";
     let body = {};
 
-    if (action === "block") {
+    if (field === "status") {
       url = `http://localhost:3000/users/status/${id}`;
-      body = { status: "blocked" };
+      body = { status: value };
     }
-    if (action === "activate") {
-      url = `http://localhost:3000/users/status/${id}`;
-      body = { status: "active" };
-    }
-    if (action === "volunteer") {
+    if (field === "role") {
       url = `http://localhost:3000/users/role/${id}`;
-      body = { role: "volunteer" };
-    }
-    if (action === "admin") {
-      url = `http://localhost:3000/users/role/${id}`;
-      body = { role: "admin" };
+      body = { role: value };
     }
 
     const res = await fetch(url, {
@@ -55,14 +47,34 @@ export default function ManageUsers() {
     }
   };
 
-  // ফিল্টার
+  // ---------- Delete Handler ----------
+  const handleDelete = async (id) => {
+    if (confirm("Are you sure you want to delete this user?")) {
+      const res = await fetch(`http://localhost:3000/users/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setUsers(users.filter((u) => u._id !== id));
+      }
+    }
+  };
+
+  // ---------- Filter ----------
   const filteredUsers =
     filter === "all" ? users : users.filter((u) => u.status === filter);
 
-  if (loading) return <div className="p-6">Loading users...</div>;
+  // ---------- Loading Spinner ----------
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+      {/* Header + Filter */}
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl text-blue-600 font-semibold">Manage Users</h1>
         <select
@@ -76,7 +88,8 @@ export default function ManageUsers() {
         </select>
       </div>
 
-      <div className="overflow-x-auto text-cyan-500 bg-white rounded-xl shadow-sm">
+      {/* Table */}
+      <div className="overflow-x-auto bg-white rounded-xl shadow-sm">
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-left text-gray-600">
             <tr>
@@ -92,36 +105,46 @@ export default function ManageUsers() {
               <tr key={u._id} className="border-t">
                 <td className="p-3">{u.name}</td>
                 <td className="p-3">{u.email}</td>
-                <td className="p-3 capitalize">{u.role}</td>
-                <td className="p-3 capitalize">{u.status}</td>
-                <td className="p-3 space-x-2">
-                  <button
-                    onClick={() => handleAction(u._id, "block")}
-                    className="px-2 py-1 text-xs border rounded hover:bg-gray-100"
+
+                {/* Role dropdown */}
+                <td className="p-3">
+                  <select
+                    value={u.role}
+                    onChange={(e) => handleUpdate(u._id, "role", e.target.value)}
+                    className="border px-2 py-1 rounded capitalize"
                   >
-                    Block
-                  </button>
-                  <button
-                    onClick={() => handleAction(u._id, "activate")}
-                    className="px-2 py-1 text-xs border rounded hover:bg-gray-100"
+                    <option value="donor">Donor</option>
+                    <option value="volunteer">Volunteer</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+
+                {/* Status dropdown */}
+                <td className="p-3">
+                  <select
+                    value={u.status}
+                    onChange={(e) =>
+                      handleUpdate(u._id, "status", e.target.value)
+                    }
+                    className="border px-2 py-1 rounded capitalize"
                   >
-                    Activate
-                  </button>
+                    <option value="active">Active</option>
+                    <option value="blocked">Blocked</option>
+                  </select>
+                </td>
+
+                {/* Delete Button */}
+                <td className="p-3">
                   <button
-                    onClick={() => handleAction(u._id, "volunteer")}
-                    className="px-2 py-1 text-xs border rounded hover:bg-gray-100"
+                    onClick={() => handleDelete(u._id)}
+                    className="px-3 py-1 text-xs border border-red-500 text-red-500 rounded hover:bg-red-50"
                   >
-                    Make Volunteer
-                  </button>
-                  <button
-                    onClick={() => handleAction(u._id, "admin")}
-                    className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700"
-                  >
-                    Make Admin
+                    Delete
                   </button>
                 </td>
               </tr>
             ))}
+
             {filteredUsers.length === 0 && (
               <tr>
                 <td colSpan={5} className="p-6 text-center text-gray-400">

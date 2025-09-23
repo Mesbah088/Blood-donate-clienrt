@@ -1,42 +1,51 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../AuthProvider/authprovider"; // তোমার AuthProvider path
+import { AuthContext } from "../../../AuthProvider/authprovider";
+import Swal from "sweetalert2";
 
 const DonorProfile = () => {
-  const { user } = useContext(AuthContext); // Firebase + backend synced user
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({});
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // backend থেকে ইউজার ডাটা আনবো
+  // backend থেকে user data আনবো
   useEffect(() => {
-    if (user && user.email) {
+    if (user?.email) {
       fetch(`http://localhost:3000/users?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data && data._id) {
             setFormData(data);
           } else {
-            // fallback যদি DB user না থাকে
+            // যদি DB তে না থাকে
             setFormData({
               name: user.displayName || "",
               email: user.email,
               bloodGroup: "",
               district: "",
               upazila: "",
+              role: "donor",
+              status: "active",
             });
           }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user:", err);
           setLoading(false);
         });
     }
   }, [user]);
 
+  // input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // save changes
   const handleSave = async () => {
     if (!formData._id) {
-      alert("⚠️ User not found in database.");
+      Swal.fire("⚠️", "User not found in database!", "warning");
       return;
     }
 
@@ -48,17 +57,18 @@ const DonorProfile = () => {
       });
 
       if (res.ok) {
-        alert("✅ Profile updated successfully!");
+        Swal.fire("✅ Success", "Profile updated successfully!", "success");
         setEditing(false);
       } else {
-        alert("❌ Failed to update profile.");
+        Swal.fire("❌ Error", "Failed to update profile", "error");
       }
     } catch (err) {
       console.error(err);
+      Swal.fire("❌ Error", "Something went wrong!", "error");
     }
   };
 
-  if (loading) return <div className="text-center py-10">Loading profile...</div>;
+  if (loading) return <div className="text-center py-10">⏳ Loading profile...</div>;
   if (!formData.email) return <div className="text-center py-10">⚠️ No user data available</div>;
 
   return (
