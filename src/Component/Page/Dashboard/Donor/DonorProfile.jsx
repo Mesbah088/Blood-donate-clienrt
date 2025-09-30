@@ -22,7 +22,7 @@ const DonorProfile = () => {
   // Backend থেকে user data আনবো
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/donor/profile/${user.email}`)
+      fetch(`https://blood-donate-server-two.vercel.app/donor/profile/${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data?._id) {
@@ -66,7 +66,7 @@ const DonorProfile = () => {
   const handleSave = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/donor/profile/${formData.email}`,
+        `https://blood-donate-server-two.vercel.app/donor/profile/${formData.email}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

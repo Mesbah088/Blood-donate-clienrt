@@ -38,7 +38,7 @@ const CreateDonationRequest = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/donation-requests", {
+      const res = await fetch("https://blood-donate-server-two.vercel.app/donation-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(request),

@@ -7,7 +7,7 @@ export default function BloodRequests() {
 
   // সব রিকোয়েস্ট লোড করা
   useEffect(() => {
-    fetch("http://localhost:3000/donation-requests") // ✅ ঠিক করা হলো
+    fetch("https://blood-donate-server-two.vercel.app/donation-requests") // ✅ ঠিক করা হলো
       .then((res) => res.json())
       .then((data) => {
         setRequests(data);
@@ -22,7 +22,7 @@ export default function BloodRequests() {
   // Action handler (status change)
   const handleAction = async (id, donationStatus) => {
     const res = await fetch(
-      `http://localhost:3000/donation-requests/status/${id}`, // ✅ ঠিক করা হলো
+      `https://blood-donate-server-two.vercel.app/donation-requests/status/${id}`, // ✅ ঠিক করা হলো
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

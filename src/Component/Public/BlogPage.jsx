@@ -6,7 +6,7 @@ const BlogPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/blogs")
+    axios.get("https://blood-donate-server-two.vercel.app/blogs")
       .then(res => {
         setBlogs(res.data);
         setLoading(false);

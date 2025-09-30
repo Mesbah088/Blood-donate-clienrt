@@ -48,7 +48,7 @@ console.log(res);
       };
 
       console.log(newUser);
-      await axios.post("http://localhost:3000/users", newUser);
+      await axios.post("https://blood-donate-server-two.vercel.app/users", newUser);
 
       Swal.fire("Success!", "Account created successfully!", "success");
       navigate("/");

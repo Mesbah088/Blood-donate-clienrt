@@ -7,7 +7,7 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000//blogs/${id}`)
+    fetch(`https://blood-donate-server-two.vercel.app//blogs/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setBlog(data);

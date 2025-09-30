@@ -11,7 +11,7 @@ const RequestsPage = () => {
     const fetchRequests = async () => {
       try {
         // ✅ শুধু pending requests আনবে
-        const res = await fetch("http://localhost:3000/donation-requests?status=pending");
+        const res = await fetch("https://blood-donate-server-two.vercel.app/donation-requests?status=pending");
         if (!res.ok) throw new Error("Failed to fetch donation requests");
         const data = await res.json();
         setRequests(data);

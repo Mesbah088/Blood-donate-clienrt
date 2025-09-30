@@ -7,7 +7,7 @@ export default function ManageUsers() {
 
   // সব ইউজার লোড করা
   useEffect(() => {
-    fetch("http://localhost:3000/users")
+    fetch("https://blood-donate-server-two.vercel.app/users")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -25,11 +25,11 @@ export default function ManageUsers() {
     let body = {};
 
     if (field === "status") {
-      url = `http://localhost:3000/users/status/${id}`;
+      url = `https://blood-donate-server-two.vercel.app/users/status/${id}`;
       body = { status: value };
     }
     if (field === "role") {
-      url = `http://localhost:3000/users/role/${id}`;
+      url = `https://blood-donate-server-two.vercel.app/users/role/${id}`;
       body = { role: value };
     }
 
@@ -50,7 +50,7 @@ export default function ManageUsers() {
   // ---------- Delete Handler ----------
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this user?")) {
-      const res = await fetch(`http://localhost:3000/users/${id}`, {
+      const res = await fetch(`https://blood-donate-server-two.vercel.app/users/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {

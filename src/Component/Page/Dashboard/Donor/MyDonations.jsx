@@ -8,7 +8,7 @@ const MyDonations = () => {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/donation-requests?requesterEmail=${user.email}`)
+      fetch(`https://blood-donate-server-two.vercel.app/donation-requests?requesterEmail=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           setRequests(data);
@@ -78,7 +78,7 @@ const MyDonations = () => {
                       className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                       onClick={async () => {
                         if (window.confirm("Are you sure you want to delete this request?")) {
-                          const res = await fetch(`http://localhost:3000/donation-requests/${req._id}`, {
+                          const res = await fetch(`https://blood-donate-server-two.vercel.app/donation-requests/${req._id}`, {
                             method: "DELETE",
                           });
                           if (res.ok) {

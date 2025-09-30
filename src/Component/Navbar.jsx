@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthProvider/authprovider";
 import { LogOut, Menu, X } from "lucide-react";
 import { toast } from "react-toastify";
@@ -7,8 +7,13 @@ import { toast } from "react-toastify";
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userData, setUserData] = useState([])
   const [mobileDashboardOpen, setMobileDashboardOpen] = useState(false);
   const navigate = useNavigate();
+  // console.log("check : ",user.email)
+  // const email = user.email
+  // console.log("check mail : ",email)
+
 
   const handleLogout = () => {
     logOut()
@@ -21,6 +26,21 @@ const Navbar = () => {
         toast.error("Logout failed");
       });
   };
+
+  useEffect(() => {
+    fetch(`https://blood-donate-server-two.vercel.app/users/${user?.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('check data ', data)
+        setUserData(data)
+      })
+      .catch((err) => {
+        console.error("Error loading users:", err);
+
+      });
+  }, [user]);
+
+
 
   const navLinks = (
     <>
@@ -40,24 +60,40 @@ const Navbar = () => {
           <div className="relative group hidden md:block">
             <span className="nav-link cursor-pointer">Dashboard</span>
             <div className="absolute left-0 mt-0 hidden group-hover:block bg-white shadow-lg rounded-md w-56 z-50">
-              <Link
-                to="/dashboard/admin"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Admin Dashboard
-              </Link>
-              <Link
-                to="/dashboard/donor"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Donor Dashboard
-              </Link>
-              <Link
-                to="/dashboard/volunteer"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Volunteer Dashboard
-              </Link>
+
+              {
+                userData?.role == "admin" && <>
+                  <Link
+                    to="/dashboard/admin"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Admin Dashboard
+                  </Link>
+                </>
+              }
+
+              {userData?.role == "donor" && (
+                <Link
+                  to="/dashboard/donor"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Donor Dashboard
+                </Link>
+              )
+              }
+              {
+                userData?.role == 'volunteer' && (
+                  <Link
+                    to="/dashboard/volunteer"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Volunteer Dashboard
+                  </Link>
+                )
+
+              }
+
+
             </div>
           </div>
 
