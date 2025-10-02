@@ -7,7 +7,7 @@ import VolunteerDashboard from "./VolunteerDashboard";
 import Loader from "../components/Shared/Loader";
 
 const Dashboard = () => {
-  const { user, loading } = useContext(AuthContext); // ✅ fixed
+  const { user, loading } = useContext(AuthContext); 
   const [role, roleLoading] = useUserRole(); // custom hook to fetch role
 
   if (loading || roleLoading) return <Loader />;

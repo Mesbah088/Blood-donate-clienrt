@@ -5,9 +5,9 @@ export default function BloodRequests() {
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
 
-  // সব রিকোয়েস্ট লোড করা
+  // All request loading
   useEffect(() => {
-    fetch("https://blood-donate-server-two.vercel.app/donation-requests") // ✅ ঠিক করা হলো
+    fetch("https://blood-donate-server-two.vercel.app/donation-requests")
       .then((res) => res.json())
       .then((data) => {
         setRequests(data);
@@ -22,7 +22,7 @@ export default function BloodRequests() {
   // Action handler (status change)
   const handleAction = async (id, donationStatus) => {
     const res = await fetch(
-      `https://blood-donate-server-two.vercel.app/donation-requests/status/${id}`, // ✅ ঠিক করা হলো
+      `https://blood-donate-server-two.vercel.app/donation-requests/status/${id}`, 
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -38,7 +38,7 @@ export default function BloodRequests() {
     }
   };
 
-  // Filter করা
+  // Filtering
   const filteredRequests =
     filter === "all"
       ? requests

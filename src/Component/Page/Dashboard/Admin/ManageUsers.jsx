@@ -5,7 +5,7 @@ export default function ManageUsers() {
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
 
-  // সব ইউজার লোড করা
+  // All user loaded
   useEffect(() => {
     fetch("https://blood-donate-server-two.vercel.app/users")
       .then((res) => res.json())
@@ -19,7 +19,7 @@ export default function ManageUsers() {
       });
   }, []);
 
-  // ---------- ইউজার Action Handler ----------
+  // ---------- user Action Handler ----------
   const handleUpdate = async (id, field, value) => {
     let url = "";
     let body = {};

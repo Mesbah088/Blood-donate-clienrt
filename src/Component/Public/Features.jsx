@@ -25,10 +25,10 @@ const featuresData = [
 const Features = () => {
   return (
     <section className="max-w-7xl mx-auto px-6 py-16 text-center">
-      {/* ✅ Main Title */}
+      {/*  Main Title */}
       <h2 className="text-3xl font-bold mb-10">Features</h2>
 
-      {/* ✅ Feature Cards */}
+      {/*  Feature Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {featuresData.map((feature) => (
           <div

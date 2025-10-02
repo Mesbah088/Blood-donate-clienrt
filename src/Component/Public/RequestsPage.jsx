@@ -10,7 +10,7 @@ const RequestsPage = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        // ✅ শুধু pending requests আনবে
+        // pending requests 
         const res = await fetch("https://blood-donate-server-two.vercel.app/donation-requests?status=pending");
         if (!res.ok) throw new Error("Failed to fetch donation requests");
         const data = await res.json();
